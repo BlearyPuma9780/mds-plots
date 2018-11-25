@@ -1,0 +1,66 @@
+---
+title: '1975'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library("vegan")
+library("smacof")
+
+# distance matrix
+distance_1975 <- as.matrix(read.csv("/home/davide/Documents/lavoro_emmina/1975_distance_matrix.csv"))
+
+# weight matrix - observation per category over total observations by a party (symmetric)
+
+weight_1975 <- as.matrix(read.csv("/home/davide/Documents/lavoro_emmina/1975_weight_matrix.csv"))
+
+lab <- c("CVP", "FDP", "SVP", "SP", "welfare", "budget", "ecolib", "cultlib", "europe", "culture", "immigration", "army", "security", "eco", "iref", "infra")
+
+#compute mds
+mds1975 = smacofSym(distance_1975, ndim = 2, weightmat = weight_1975)
+
+```
+
+Rotation axis: 
+```{r}
+angle <- -0.05
+M <- matrix(c(cos(angle), -sin(angle), sin(angle), cos(angle)), 2, 2)
+#temp data
+data <- cbind(mds1975$conf[,1], mds1975$conf[,2])
+#rotating the graph
+mds1975$conf[,1] <- (data %*% M)[,1]
+mds1975$conf[,2] <- (data %*% M)[,2]
+
+```
+
+Translation
+```{r}
+y = -0.45
+mds1975$conf[,2] <- mds1975$conf[,2] + y
+```
+
+
+Plot:
+```{r}
+
+
+plot(mds1975$conf[,1], mds1975$conf[,2], type = "p", pch = 19, bty="n", xlab = "dimension1", ylab = "dimension2", axes = FALSE, main = "1975")
+text(mds1975$conf[,1], mds1975$conf[,2], lab, cex = 0.9, xpd = TRUE, pos = 3)
+axis(1, pos=0, tck=0, labels = FALSE)
+axis(2, pos=0, tck=0, labels = FALSE)
+
+#segments(mds1975$conf[1, 1], mds1975$conf[1, 2], mds1975$conf[3, 1], mds1975$conf[3, 2])
+segments(mds1975$conf[3, 1], mds1975$conf[3, 2], mds1975$conf[2, 1], mds1975$conf[2, 2])
+segments(mds1975$conf[2, 1], mds1975$conf[2, 2], mds1975$conf[4, 1], mds1975$conf[4, 2])
+#segments(mds1975$conf[5, 1], mds1975$conf[5, 2], mds1975$conf[4, 1], mds1975$conf[4, 2])
+segments(mds1975$conf[4, 1], mds1975$conf[4, 2], mds1975$conf[3, 1], mds1975$conf[3, 2])
+
+#plot(mds1[,1], mds1[,2], type = "n", xlab = "ciao", ylab = "lol", axes = TRUE, main = "cmdscale")
+#text(mds1[,1], mds1[,2], lab, cex = 0.9, xpd = TRUE)
+
+```
