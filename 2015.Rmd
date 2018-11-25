@@ -14,11 +14,11 @@ library("vegan")
 library("smacof")
 
 # distance matrix
-distance_2015 <- as.matrix(read.csv("/home/davide/Documents/lavoro_emmina/2015_distance_matrix.csv"))
+distance_2015 <- as.matrix(read.csv("./2015_distance_matrix.csv"))
 
 # weight matrix - observation per category over total observations by a party (symmetric)
 
-weight_2015 <- as.matrix(read.csv("/home/davide/Documents/lavoro_emmina/2015_weight_matrix.csv"))
+weight_2015 <- as.matrix(read.csv("./2015_weight_matrix.csv"))
 
 lab <- c("CVP", "FDP", "SVP", "SP", "GP", "welfare", "budget", "ecolib", "cultlib", "europe", "culture", "immigration", "army", "security", "eco", "iref", "infra")
 
